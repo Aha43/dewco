@@ -1,11 +1,13 @@
-from dewco import domain
+from dewco import domain, systemcontroller
 import json
 
 values = []
 values.append(domain.Value("temp", 22))
 
+platformController = systemcontroller.PlatformSystemController()
+
 systems = []
-systems.append(domain.System.fromSuccess("PI", values))
+systems.append(platformController.status())
 systems.append(domain.System.fromError("Hat", "Power failure"))
 
 r = domain.Result.fromSuccess(systems)
