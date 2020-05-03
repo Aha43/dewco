@@ -3,7 +3,6 @@ import json
 
 values = []
 values.append(domain.Value("temp", 22))
-#r = domain.Result(True, "All cool", domain.System.fromSuccess("PI", values), domain.System.fromError("Hat", "Power failure"))
 
 systems = []
 systems.append(domain.System.fromSuccess("PI", values))
