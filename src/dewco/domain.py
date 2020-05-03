@@ -30,10 +30,19 @@ class System:
 
 
 class Result:
-    def __init__(self, ok: bool = True, message: str = None, *argv):
+    def __init__(self, ok: bool, message: str, systems):
         self.time = str(datetime.now())
         self.ok = ok
         self.message = message
         self.systems = []
-        for arg in argv:
-            self.systems.append(arg)
+        if systems != None:
+            for system in systems:
+                self.systems.append(system)
+
+    @classmethod
+    def fromError(cls, message: str):
+        return cls(False, message, None)
+
+    @classmethod
+    def fromSuccess(cls, systems):
+        return cls(True, None, systems)
