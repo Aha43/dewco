@@ -7,7 +7,8 @@ values.append(domain.Value("temp", 22))
 platformController = systemcontroller.PlatformSystemController()
 
 systems = []
-systems.append(platformController.status())
+for s in platformController.status():
+    systems.append(s)
 systems.append(domain.System.fromError("Hat", "Power failure"))
 
 r = domain.Result.fromSuccess(systems)

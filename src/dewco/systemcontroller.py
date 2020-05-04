@@ -1,5 +1,7 @@
 import platform
 
+from typing import List
+
 from .domain import System, Value
 
 class SystemController:
@@ -7,7 +9,7 @@ class SystemController:
     def __init__(self, name: str):
         self.name = name
 
-    def status(self) -> System:
+    def status(self) -> List[System]:
         """Gets status of system in term of a System object"""
         pass
 
@@ -15,7 +17,8 @@ class PlatformSystemController(SystemController):
     def __init__(self):
         super().__init__("Platform")
 
-    def status(self) -> System:
+    def status(self) -> List[System]:
+        retVal = []
         data = platform.uname()
         state = []
         if (data[0]):
@@ -30,4 +33,5 @@ class PlatformSystemController(SystemController):
             state.append(Value("machine", data[4]))
         if (data[5]):
             state.append(Value("processor", data[5]))
-        return System.fromSuccess(self.name, state)
+        retVal.append(System.fromSuccess(self.name, state))
+        return retVal
