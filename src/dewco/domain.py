@@ -15,11 +15,13 @@ class Value:
     def readOnly(cls, name: str, value: object, unit: str = None):
         retVal = cls(name, value, unit)
         retVal.write = False
+        return retVal
 
     @classmethod
     def readWrite(cls, name: str, value: object, unit: str = None):
         retVal = cls(name, value, unit)
         retVal.write = True
+        return retVal
 
 class System:
     """Represent state or desired sub state of a device System"""

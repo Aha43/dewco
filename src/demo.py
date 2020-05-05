@@ -1,17 +1,22 @@
-from dewco import domain, systemcontroller
+
+from dewco import services, domain, controllers
 import json
 
-values = []
-values.append(domain.Value("temp", 22))
+#values = []
+#values.append(domain.Value("temp", 22))
 
-platformController = systemcontroller.PlatformSystemController()
+platformController = controllers.PlatformSystemController()
+controllers = [platformController]
+service = services.SystemsService(controllers)
+r = service.status()
 
-systems = []
-for s in platformController.status():
-    systems.append(s)
-systems.append(domain.System.fromError("Hat", "Power failure"))
 
-r = domain.Result.fromSuccess(systems)
+#systems = []
+#for s in platformController.status():
+#    systems.append(s)
+#systems.append(domain.System.fromError("Hat", "Power failure"))
+
+#r = domain.Result.fromSuccess(systems)
 
 js = json.dumps(r, default=lambda x: x.__dict__, indent=4)
 

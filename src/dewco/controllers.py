@@ -22,16 +22,16 @@ class PlatformSystemController(SystemController):
         data = platform.uname()
         state = []
         if (data[0]):
-            state.append(Value("system", data[0]))
+            state.append(Value.readOnly("system", data[0]))
         if (data[1]):
-            state.append(Value("node", data[1]))
+            state.append(Value.readOnly("node", data[1]))
         if (data[2]):
-            state.append(Value("release", data[2]))
+            state.append(Value.readOnly("release", data[2]))
         if (data[3]):
-            state.append(Value("version", data[3]))
+            state.append(Value.readOnly("version", data[3]))
         if (data[4]):
-            state.append(Value("machine", data[4]))
+            state.append(Value.readOnly("machine", data[4]))
         if (data[5]):
-            state.append(Value("processor", data[5]))
+            state.append(Value.readOnly("processor", data[5]))
         retVal.append(System.fromSuccess(self.name, state))
         return retVal
