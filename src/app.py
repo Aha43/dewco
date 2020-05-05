@@ -19,7 +19,7 @@ def get():
     except:
         message = sys.exc_info()[0]
         result = domain.Result.fromError(message)
-        
+
     response = app.response_class(
         response = json.dumps(result, default=lambda x: x.__dict__, indent=4),
         status = 200,
@@ -28,4 +28,4 @@ def get():
 
     return response
 
-app.run()
+app.run(host = '0.0.0.0', port = 8090)
