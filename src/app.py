@@ -1,13 +1,14 @@
 import flask
 import sys
-from dewco import services, domain, controllers
+from dewco import services, domain, controllers, sense_hat_controller
 import json
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
 platformController = controllers.PlatformSystemController()
-controllers = [platformController]
+senseHatController = sense_hat_controller.SenseHatSystemController()
+controllers = [platformController, senseHatController]
 service = services.SystemsService(controllers)
 
 @app.route('/', methods=['GET'])
