@@ -1,4 +1,4 @@
-#from sense_emu import SenseHat
+from sense_emu import SenseHat
 from .controllers import SystemController
 from typing import List
 from .domain import System, Value
@@ -10,6 +10,8 @@ class SenseHatSystemController(SystemController):
 	def status(self) -> List[System]:
 		retVal = []
 		state = []
+		sense = SenseHat()
 		state.append(Value.readOnly("system-name", "SenseHat"))
+		state.append(Value.readOnly("humidity", sense.get_humidity()))
 		retVal.append(System.fromSuccess(self.name, state))
 		return retVal
