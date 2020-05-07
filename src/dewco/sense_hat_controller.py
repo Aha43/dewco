@@ -4,14 +4,17 @@ from typing import List
 from .domain import System, Value
 
 class SenseHatSystemController(SystemController):
-	def __init__(self):
-		super().__init__("SenseHat")
+		def __init__(self):
+				super().__init__("SenseHat")
 
-	def status(self) -> List[System]:
-		retVal = []
-		state = []
-		sense = SenseHat()
-		state.append(Value.readOnly("system-name", "SenseHat"))
-		state.append(Value.readOnly("humidity", sense.get_humidity()))
-		retVal.append(System.fromSuccess(self.name, state))
-		return retVal
+		def status(self) -> List[System]:
+				retVal = []
+				state = []
+				sense = SenseHat()
+				state.append(Value.readOnly("system-name", "SenseHat"))
+				if sense != None:
+						state.append(Value.readOnly("available", "false"))
+				else:
+						state.append(Value.readOnly("humidity", sense.get_humidity()))
+                                retVal.append(System.fromSuccess(self.name, state))
+                                return reversed
