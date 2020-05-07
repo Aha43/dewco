@@ -1,10 +1,13 @@
 try:
 	from sense_hat import SenseHat
+	print(">>>>Imported real sense hat")
 except:
 	try:
 		from sense_emu import SenseHat
+		print(">>>>Imported emulator sense hat")
 	except ImportError:
 		from .sense_dummy import SenseHat
+		print(">>>>Import dummy sense hat")
 
 from .controllers import SystemController
 from typing import List
@@ -15,6 +18,7 @@ class SenseHatSystemController(SystemController):
 		super().__init__("SenseHat")
 
 	def status(self) -> List[System]:
+
 		retVal = []
 		state = []
 		sense = SenseHat()
