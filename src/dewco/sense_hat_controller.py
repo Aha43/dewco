@@ -21,7 +21,7 @@ class SenseHatSystemController(SystemController):
 
 		retVal = []
 		state = []
-		sense = SenseHat()
+		sense = self.__get_sense_system()
 		state.append(Value.readOnly("system-name", "SenseHat"))
 		available = sense != None
 		state.append(Value.readOnly("available", available))
@@ -29,3 +29,9 @@ class SenseHatSystemController(SystemController):
 			state.append(Value.readOnly("humidity", sense.get_humidity()))
 		retVal.append(System.fromSuccess(self.name, state))
 		return retVal
+
+	def __get_sense_system(self):
+		try:
+			return SenseHat()
+		except:
+			return None

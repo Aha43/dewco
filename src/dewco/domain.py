@@ -1,4 +1,5 @@
 import json
+from .util import get_api_value_type
 
 from datetime import datetime
 from typing import List
@@ -7,9 +8,10 @@ class Value:
     """Represents a named value of a System state"""
     def __init__(self, name: str, value: object, unit: str):
         self.name = name
-        self.value = value
+        self.value = str(value)
         self.unit = unit
         self.write = False
+        self.type = get_api_value_type(value)
 
     @classmethod
     def readOnly(cls, name: str, value: object, unit: str = None):
