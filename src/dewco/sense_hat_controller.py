@@ -1,13 +1,17 @@
-try:
-	from sense_hat import SenseHat
-	print(">>>>Imported real sense hat")
-except:
-	try:
-		from sense_emu import SenseHat
-		print(">>>>Imported emulator sense hat")
-	except ImportError:
-		from .sense_dummy import SenseHat
-		print(">>>>Import dummy sense hat")
+# try:
+# 	from sense_hat import SenseHat
+# 	print(">>>>Imported real sense hat")
+# except:
+# 	try:
+# 		from sense_emu import SenseHat
+# 		print(">>>>Imported emulator sense hat")
+# 	except ImportError:
+# 		from .sense_dummy import SenseHat
+# 		print(">>>>Import dummy sense hat")
+
+import importlib
+
+sense_module = importlib.import_module("dewco.sense_dummy")
 
 from .controllers import SystemController
 from typing import List
@@ -32,6 +36,6 @@ class SenseHatSystemController(SystemController):
 
 	def __get_sense_system(self):
 		try:
-			return SenseHat()
+			return sense_module.SenseHat()
 		except:
 			return None
