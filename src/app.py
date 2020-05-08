@@ -28,7 +28,7 @@ def get():
     return response
 
 def getResultJSON(result: object) -> str:
-    if result != None:
+    if result == None:
         raise TypeError("result is None")
     retVal = json.dumps(result, default=lambda x: x.__dict__, indent=4)
     return retVal
