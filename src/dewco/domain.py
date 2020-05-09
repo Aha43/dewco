@@ -55,18 +55,19 @@ class System:
 
 class Result:
     """Result of a request to a device"""
-    def __init__(self, ok: bool, message: str, systems: List[System]):
+    def __init__(self, ok: bool, message: str, data: List[object]):
         self.time = str(datetime.now())
+        self.utc = str(datetime.utcnow())
         self.ok = ok
         self.message = message
-        self.systems = []
-        if systems != None:
-            self.systems = systems.copy()
+        self.data = []
+        if data != None:
+            self.data = data.copy()
 
     @classmethod
     def fromError(cls, message: str):
         return cls(False, message, None)
 
     @classmethod
-    def fromSuccess(cls, systems: List[System]):
-        return cls(True, None, systems)
+    def fromSuccess(cls, data: List[object]):
+        return cls(True, None, data)
