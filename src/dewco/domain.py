@@ -1,8 +1,7 @@
-import json
-from .util import get_api_value_type
-
+import numbers
 from datetime import datetime
 from typing import List
+
 
 class Value:
     """Represents a named value of a System state"""
@@ -11,7 +10,16 @@ class Value:
         self.value = str(value)
         self.unit = unit
         self.write = False
-        self.type = get_api_value_type(value)
+        self.type = self.__get_api_value_type(value)
+
+    def __get_api_value_type(self, val: object) -> str:
+        if (val == None):
+            return "null"
+        if (isinstance(val, bool)):
+            return "boolean"
+        if (isinstance(val, numbers.Number)):
+            return "number"
+        return "string"
 
     @classmethod
     def readOnly(cls, name: str, value: object, unit: str = None):

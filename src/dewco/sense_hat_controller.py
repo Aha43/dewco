@@ -1,17 +1,11 @@
-# try:
-# 	from sense_hat import SenseHat
-# 	print(">>>>Imported real sense hat")
-# except:
-# 	try:
-# 		from sense_emu import SenseHat
-# 		print(">>>>Imported emulator sense hat")
-# 	except ImportError:
-# 		from .sense_dummy import SenseHat
-# 		print(">>>>Import dummy sense hat")
+#!/usr/bin/env python
 
 import importlib
+from .util import get_env_var
 
-sense_module = importlib.import_module("dewco.sense_dummy")
+senseHatModule = get_env_var("__sense_hat_module__", "sense_hat")
+sense_module = importlib.import_module(senseHatModule)
+#sense_module = importlib.import_module("dewco.sense_dummy")
 
 from .controllers import SystemController
 from typing import List
