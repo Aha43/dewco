@@ -2,7 +2,7 @@ import importlib
 from typing import Dict
 
 from ...domain import System, Value
-from ...util import get_env_var
+from ...util import get_env_var, Units
 from ..handlers import SystemHandler, add_system_handler, SystemHandlers
 
 
@@ -26,6 +26,12 @@ class SenseHatEnvironmentSystemHandler(SystemHandler):
         state.append(Value.read_only("system-name", "SenseHat"))
         available = self.senseHat != None
         state.append(Value.read_only("available", available))
+
         if available:
-            state.append(Value.read_only("humidity", self.senseHat.get_humidity()))
+            state.append(Value.read_only("humidity", self.senseHat.get_humidity(), Units.percentage_of_relative_humidity))
+            state.append(Value.read_only("pressure", self.senseHat.get_pressure(), Units.millibars))
+            state.append(Value.read_only("temperature", self.senseHat.get_temperature(), Units.celsius))
+            state.append(Value.read_only("temperature_from_humidity", self.senseHat.get_temperature_from_humidity(), Units.celsius))
+            state.append(Value.read_only("temperature_from_pressure", self.senseHat.get_temperature_from_pressure(), Units.celsius))
+        
         return System.from_success(self.name, state)

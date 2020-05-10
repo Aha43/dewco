@@ -1,14 +1,18 @@
 import numbers
 from datetime import datetime
 from typing import List
+from .util import Units
 
 
 class Value:
     """Represents a named value of a System state"""
-    def __init__(self, name: str, value: object, unit: str):
+    def __init__(self, name: str, value: object, unit: Units):
         self.name = name
-        self.value = str(value)
-        self.unit = unit
+        self.value = str(value).lower()
+        if unit == None:
+            self.unit = None
+        else:
+            self.unit = unit.name
         self.write = False
         self.type = self.__get_api_value_type(value)
 
@@ -22,13 +26,13 @@ class Value:
         return "string"
 
     @classmethod
-    def read_only(cls, name: str, value: object, unit: str = None):
+    def read_only(cls, name: str, value: object, unit: Units = None):
         retVal = cls(name, value, unit)
         retVal.write = False
         return retVal
 
     @classmethod
-    def read_write(cls, name: str, value: object, unit: str = None):
+    def read_write(cls, name: str, value: object, unit: Units = None):
         retVal = cls(name, value, unit)
         retVal.write = True
         return retVal
