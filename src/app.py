@@ -24,7 +24,7 @@ def getSystem():
         for h in systemHandlers.values():
             name = h.name
             systems.append(name)
-        result = domain.Result.fromSuccess(systems)
+        result = domain.Result.from_success(systems)
     except:
         message = sys.exc_info()[0]
         result = domain.Result.from_error(message)
