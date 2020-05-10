@@ -1,9 +1,9 @@
 import importlib
 from typing import Dict
 
-from ..domain import System, Value
-from ..util import get_env_var
-from .handlers import SystemHandler, add_system_handler, SystemHandlers
+from ...domain import System, Value
+from ...util import get_env_var
+from ..handlers import SystemHandler, add_system_handler, SystemHandlers
 
 
 def add_sense_hat_handlers(handlers: SystemHandlers) -> None:

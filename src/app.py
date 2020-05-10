@@ -8,7 +8,7 @@ import flask
 
 from dewco import domain
 from dewco.systems.handlers import SystemHandlers, add_common_system_handlers
-from dewco.systems.sense_hat import add_sense_hat_handlers
+from dewco.systems.sensehat.sense_hat_handlers import add_sense_hat_handlers
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
