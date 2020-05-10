@@ -1,28 +1,59 @@
 #!/usr/bin/python3
 
-import flask
 import json
 import sys
+import flask
+from typing import List
 
-from dewco import services, domain, controllers, sense_hat_controller
+from dewco import domain
+from dewco.systems.handlers import SystemHandlers, add_common_system_handlers
+from dewco.systems.sense_hat import add_sense_hat_handlers
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-platformController = controllers.PlatformSystemController()
-senseHatController = sense_hat_controller.SenseHatSystemController()
-controllers = [platformController, senseHatController]
-service = services.SystemsService(controllers)
+systemHandlers = dict()
+add_common_system_handlers(systemHandlers)
+add_sense_hat_handlers(systemHandlers)
 
-@app.route('/', methods=['GET'])
-def get():
+@app.route('/system', methods=['GET'])
+def getSystem():
     result = None
     try:
-        status = service.status()
-        result = domain.Result.fromSuccess(status)
+        systems = []
+        for h in systemHandlers.values():
+            name = h.name
+            systems.append(name)
+        result = domain.Result.fromSuccess(systems)
     except:
         message = sys.exc_info()[0]
-        result = domain.Result.fromError(message)
+        result = domain.Result.from_error(message)
+
+    json = getResultJSON(result)
+    response = app.response_class(json, status = 200, mimetype='application/json')
+
+    return response
+
+def get_systems_from_query() -> List[str]: 
+    systemsQuery = flask.request.args.get("systems")
+    if systemsQuery == None:
+        return []
+    return systemsQuery.split(',')
+
+@app.route('/state', methods=['GET'])
+def getState():
+    system = get_systems_from_query()
+    print(system)
+    result = None
+    try:
+        states = []
+        for s in system:
+            if s in systemHandlers:
+                states.append(systemHandlers[s].state())
+        result = domain.Result.from_success(states)
+    except:
+        message = sys.exc_info()[0]
+        result = domain.Result.from_error(message)
 
     json = getResultJSON(result)
     response = app.response_class(json, status = 200, mimetype='application/json')

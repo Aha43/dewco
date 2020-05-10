@@ -22,22 +22,20 @@ class Value:
         return "string"
 
     @classmethod
-    def readOnly(cls, name: str, value: object, unit: str = None):
+    def read_only(cls, name: str, value: object, unit: str = None):
         retVal = cls(name, value, unit)
         retVal.write = False
         return retVal
 
     @classmethod
-    def readWrite(cls, name: str, value: object, unit: str = None):
+    def read_write(cls, name: str, value: object, unit: str = None):
         retVal = cls(name, value, unit)
         retVal.write = True
         return retVal
 
 class System:
     """Represent state or desired sub state of a device System"""
-    def __init__(self, id: int, parent: id, name: str, ok: bool, message: str, state: List[Value]):
-        self.id = id
-        self.parent = parent
+    def __init__(self, name: str, ok: bool, message: str, state: List[Value]):
         self.name = name
         self.ok = ok
         self.message = message
@@ -46,12 +44,12 @@ class System:
             self.state = state.copy()
 
     @classmethod
-    def fromSuccess(cls, name: str, state: List[Value], id: int = 0, parent = -1):
-        return cls(id, parent, name, True, None, state)
+    def from_success(cls, name: str, state: List[Value]):
+        return cls(name, True, None, state)
 
     @classmethod
-    def fromError(cls, name: str, message: str, id: int = 0, parent = -1):
-        return cls(id, parent, name, False, message, None)
+    def from_error(cls, name: str, message: str):
+        return cls(name, False, message, None)
 
 class Result:
     """Result of a request to a device"""
@@ -65,9 +63,9 @@ class Result:
             self.data = data.copy()
 
     @classmethod
-    def fromError(cls, message: str):
+    def from_error(cls, message: str):
         return cls(False, message, None)
 
     @classmethod
-    def fromSuccess(cls, data: List[object]):
+    def from_success(cls, data: List[object]):
         return cls(True, None, data)
