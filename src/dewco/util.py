@@ -12,7 +12,7 @@ def get_env_var(name: str, default: str = None) -> str:
 def put_env_var(name: str, val: str) -> None:
     os.putenv(name, val)
 
-class Units(enum.Enum):
-    celsius = 1
-    percentage_of_relative_humidity = 2
-    millibars = 3
+class Units:
+    celsius = "celsius"
+    millibars = "millibars"
+    percentage_of_relative_humidity = "percentage_of_relative_humidity"

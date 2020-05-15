@@ -10,13 +10,7 @@ from dewco import domain
 from dewco.systems.handlers import SystemHandlers, add_common_system_handlers
 from dewco.systems.sensehat.sense_hat_handlers import add_sense_hat_handlers
 
-app = flask.Flask(__name__)
-app.config["DEBUG"] = True
-
-systemHandlers = dict()
-add_common_system_handlers(systemHandlers)
-add_sense_hat_handlers(systemHandlers)
-
+#
 def get_systems_from_query() -> List[str]: 
     systemsQuery = flask.request.args.get("systems")
     if systemsQuery == None:
@@ -29,10 +23,20 @@ def get_result_json(result: object) -> str:
     retVal = json.dumps(result, default=lambda x: x.__dict__, indent=4)
     return retVal
 
-def ok(result) -> str:
+def ok(result = None) -> str:
+    if result == None:
+        result = ""
     json = get_result_json(result)
     response = app.response_class(json, status = 200, mimetype = 'application/json')
     return response
+#
+
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
+systemHandlers = dict()
+add_common_system_handlers(systemHandlers)
+add_sense_hat_handlers(systemHandlers)
 
 @app.route('/system', methods=['GET'])
 def getSystem():
@@ -63,4 +67,22 @@ def getState():
         result = domain.Result.from_error(message)
     return ok(result)
 
-app.run(host = '0.0.0.0', port = 8090)
+@app.route('/state', methods=['POST'])
+def postState():
+
+    req = flask.request.get_json()
+
+    for e in req:
+        print(type(e))
+        print(e)
+
+    return ok()
+
+if __name__ == "__main__":
+    app.run(host = '0.0.0.0', port = 8090)
+
+#
+# Utilities
+#
+
+#def get_system_from_dict(d: dict) -> domain.System
