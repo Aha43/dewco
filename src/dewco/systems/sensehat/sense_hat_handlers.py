@@ -3,7 +3,7 @@ import time
 from typing import Dict, List
 
 from ...domain import System, Value
-from ...domain_util import str_to_int
+from ...domain_util import str_to_int, str_to_int_list
 from ...util import get_env_var, Units
 from ..handlers import SystemHandler, add_system_handler, SystemHandlers
 
@@ -66,11 +66,13 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
         letters = system.get_state_value("letters")
         sleep = str_to_int(system.get_state_value("sleep", "1"))
         rotation = str_to_int(system.get_state_value("rotation", "0"))
+        text_color = str_to_int_list(system.get_state_value("text_color", "255,255,255"))
+        back_color = str_to_int_list(system.get_state_value("back_color", "0,0,0"))
         
         if rotation != 0:
             self.senseHat.set_rotation(rotation)
 
         for c in letters:
             cs = str(c)
-            self.senseHat.show_letter(cs)
+            self.senseHat.show_letter(cs, text_color, back_color)
             time.sleep(sleep)

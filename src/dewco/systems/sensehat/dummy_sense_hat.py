@@ -1,3 +1,4 @@
+from ...domain_util import list_to_str
 class SenseDummy:
     """Fallback dummy api for the SenseHat API when nor a real Sense HAT system or emulator is avaliable"""
 
@@ -18,7 +19,7 @@ class SenseDummy:
         print("set rotation: " + str(r))
 
     def show_letter(self, s: str, text_color = [255, 255, 255], back_color = [255, 255, 255]) -> None:
-        print("show on LED letter: " + s)
+        print("show on LED letter: " + s + "(" + list_to_str(text_color) + " , " + list_to_str(back_color))
 
 def SenseHat():
     return SenseDummy()
