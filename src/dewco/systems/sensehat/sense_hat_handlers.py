@@ -1,7 +1,9 @@
 import importlib
+import time
 from typing import Dict, List
 
 from ...domain import System, Value
+from ...domain_util import str_to_int
 from ...util import get_env_var, Units
 from ..handlers import SystemHandler, add_system_handler, SystemHandlers
 
@@ -62,4 +64,9 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
 
     def perform_show_letter(self, system: System) -> str:
         letters = system.get_state_value("letters")
-        self.senseHat.show_letter(letters)
+        sleep = str_to_int(system.get_state_value("sleep", "1"))
+
+        for c in letters:
+            cs = str(c)
+            self.senseHat.show_letter(cs)
+            time.sleep(sleep)

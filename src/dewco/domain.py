@@ -89,8 +89,8 @@ class System:
                 return v
         return None
 
-    def get_state_value(self, name: str) -> str:
+    def get_state_value(self, name: str, default: str = "") -> str:
         var = self.get_state_variable(name)
         if var:
             return var.value
-        return ""
+        return default
