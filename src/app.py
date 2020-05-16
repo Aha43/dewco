@@ -72,17 +72,13 @@ def postState():
 
     req = flask.request.get_json()
 
-    for e in req:
-        print(type(e))
-        print(e)
+    # for e in req:
+    #     print(type(e))
+    #     print(e)
+
+    system = domain.System.from_dict(req)
 
     return ok()
 
 if __name__ == "__main__":
     app.run(host = '0.0.0.0', port = 8090)
-
-#
-# Utilities
-#
-
-#def get_system_from_dict(d: dict) -> domain.System

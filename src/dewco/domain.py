@@ -1,18 +1,16 @@
 import numbers
 from datetime import datetime
-from typing import List
+from typing import Dict, List
 
-def to_str(o: object) -> str:
-    if o == None:
-        return ""
-    return str(o).lower()
+from .domain_util import get_dict_value, object_to_str, str_to_bool, str_to_float
+
 
 class Value:
     """Represents a named value of a System state"""
     def __init__(self, name: str, value: object, unit: str):
-        self.name = to_str(name)
-        self.value = to_str(value)
-        self.unit = to_str(unit)
+        self.name = object_to_str(name)
+        self.value = object_to_str(value)
+        self.unit = object_to_str(unit)
         self.write = "false"
         self.type = self.__get_api_value_type(value)
 
@@ -25,40 +23,58 @@ class Value:
             return "number"
         return "string"
 
-    # @classmethod
-    # def from_dict(cls, d: dict):
-    #     name = dict["name"]
-    #     value = dict["value"]
-    #     unit = dict["unit"]
-    #     type = dict["type"]
-    #     write = dict["write"]
-
-    #     pass
+    @classmethod
+    def from_dict(cls, d: dict):
+        name = get_dict_value("name", d)
+        value = get_dict_value("value", d)
+        unit = get_dict_value("unit", d)
+        retVal = cls(name, value, unit)
+        retVal.write = get_dict_value("write", d)
+        retVal.type = get_dict_value("type", d)
+        return retVal
 
     @classmethod
     def read_only(cls, name: str, value: object, unit: str = None):
         retVal = cls(name, value, unit)
-        retVal.write = to_str(False)
+        retVal.write = object_to_str(False)
         return retVal
 
     @classmethod
     def read_write(cls, name: str, value: object, unit: str = None):
         retVal = cls(name, value, unit)
-        retVal.write = to_str(True)
+        retVal.write = object_to_str(True)
         return retVal
 
-    
+def get_state(dicts: List[Dict]) -> List[Value]:
+    retVal = []
+    for d in dicts:
+        retVal.append(Value.from_dict(d))
+    return retVal
 
 class System:
     """Represent state or desired sub state of a device System"""
-    def __init__(self, name: str, ok: bool, message: str, state: List[Value]):
-        self.name = to_str(name)
-        self.ok = to_str(ok)
-        self.message = to_str(message)
+    def __init__(self, name: str, ok: bool, message: str, state: List[Value], action: str = "read"):
+        self.name = object_to_str(name)
+        self.ok = object_to_str(ok)
+        self.message = object_to_str(message)
         self.state = []
         if state != None:
             self.state = state.copy()
+        self.action = action
 
+    @classmethod
+    def from_dict(cls, d: dict):
+        name = get_dict_value("name", d)
+        ok = str_to_bool(get_dict_value("ok", d, "true"))
+        message = get_dict_value("message", d)
+        stateDicts = []
+        if "state" in d:
+            stateDicts = d["state"]
+        state = get_state(stateDicts)
+        action = get_dict_value("action", d, "read")
+        retVal = cls(name, ok, message, state, action)
+        return retVal
+        
     @classmethod
     def from_success(cls, name: str, state: List[Value]):
         return cls(name, True, None, state)
@@ -70,10 +86,10 @@ class System:
 class Result:
     """Result of a request to a device"""
     def __init__(self, ok: bool, message: str, data: List[object]):
-        self.time = to_str(datetime.now())
-        self.utc = to_str(datetime.utcnow())
-        self.ok = to_str(ok)
-        self.message = to_str(message)
+        self.time = object_to_str(datetime.now())
+        self.utc = object_to_str(datetime.utcnow())
+        self.ok = object_to_str(ok)
+        self.message = object_to_str(message)
         self.data = []
         if data != None:
             self.data = data.copy()
