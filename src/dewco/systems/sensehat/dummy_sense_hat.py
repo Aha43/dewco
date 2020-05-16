@@ -14,9 +14,11 @@ class SenseDummy:
         return 14.5
 
     #LED
+    def set_rotation(self, r: int, redraw: bool = True) -> None:
+        print("set rotation: " + str(r))
+
     def show_letter(self, s: str, text_color = [255, 255, 255], back_color = [255, 255, 255]) -> None:
         print("show on LED letter: " + s)
-        return None
 
 def SenseHat():
     return SenseDummy()

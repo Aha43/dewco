@@ -65,6 +65,10 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
     def perform_show_letter(self, system: System) -> str:
         letters = system.get_state_value("letters")
         sleep = str_to_int(system.get_state_value("sleep", "1"))
+        rotation = str_to_int(system.get_state_value("rotation", "0"))
+        
+        if rotation != 0:
+            self.senseHat.set_rotation(rotation)
 
         for c in letters:
             cs = str(c)
