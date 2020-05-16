@@ -1,10 +1,9 @@
 import importlib
-from typing import Dict
+from typing import Dict, List
 
 from ...domain import System, Value
 from ...util import get_env_var, Units
 from ..handlers import SystemHandler, add_system_handler, SystemHandlers
-
 
 def add_sense_hat_handlers(handlers: SystemHandlers) -> None:
     senseHat = None
@@ -17,18 +16,26 @@ def add_sense_hat_handlers(handlers: SystemHandlers) -> None:
     add_system_handler(handlers, SenseHatEnvironmentSystemHandler(senseHat))
     add_system_handler(handlers, SenseHatLedSystemHandler(senseHat))
 
-class SenseHatEnvironmentSystemHandler(SystemHandler):
-    def __init__(self, senseHat):
-        super().__init__("sense_hat.environment")
+class BaseSenseHatSystemHandler(SystemHandler):
+    def __init__(self, senseHat, subname: str):
+        super().__init__("sense_hat." + subname)
         self.senseHat = senseHat
+        self.available = self.senseHat != None
+
+    def _get_base_state(self) -> List[Value]:
+        state = []
+        state.append(Value.read_only("system-name", self.name))
+        state.append(Value.read_only("available", self.available))
+        return state
+
+class SenseHatEnvironmentSystemHandler(BaseSenseHatSystemHandler):
+    def __init__(self, senseHat):
+        super().__init__(senseHat, "environment")
 
     def state(self) -> System:
-        state = []
-        state.append(Value.read_only("system-name", "SenseHat"))
-        available = self.senseHat != None
-        state.append(Value.read_only("available", available))
+        state = self._get_base_state()
 
-        if available:
+        if self.available:
             state.append(Value.read_only("humidity", self.senseHat.get_humidity(), Units.percentage_of_relative_humidity))
             state.append(Value.read_only("pressure", self.senseHat.get_pressure(), Units.millibars))
             state.append(Value.read_only("temperature", self.senseHat.get_temperature(), Units.celsius))
@@ -37,23 +44,22 @@ class SenseHatEnvironmentSystemHandler(SystemHandler):
         
         return System.from_success(self.name, state)
 
-class SenseHatLedSystemHandler(SystemHandler):
+class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
     def __init__(self, senseHat):
-        super().__init__("sense_hat.led")
+        super().__init__(senseHat, "led")
         self.senseHat = senseHat
 
     def state(self) -> System:
-        state = []
-        state.append(Value.read_only("system-name", "SenseHat"))
-        available = self.senseHat != None
-        state.append(Value.read_only("available", available))
+        state = self._get_base_state()
+        return System.from_success(self.name, state)
 
     def action(self, system: System) -> str:
-        if system.action == 'show_letter':
-            return self.perform_show_letter(system)
-        return "uknown action: " + system.action
+        if self.available:
+            if system.action == 'show_letter':
+                return self.perform_show_letter(system)
+            return "uknown action: " + system.action
+        return "system not available"
 
     def perform_show_letter(self, system: System) -> str:
         letters = system.get_state_value("letters")
         self.senseHat.show_letter(letters)
-        return "OK"

@@ -20,7 +20,11 @@ def str_to_float(v: str) -> float:
 def object_to_str(o: object) -> str:
     if o == None:
         return ""
-    return str(o).lower()
+    s = str(o)
+    l = s.lower()
+    if l == "false" or l == "true":
+        return l
+    return s
 
 def get_dict_value(name: str, dict, default: str = "") -> str:
     if name in dict:

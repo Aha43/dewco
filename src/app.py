@@ -7,10 +7,10 @@ from typing import List
 import flask
 
 from dewco import domain
+from dewco.rest_util import Result
 from dewco.systems.handlers import SystemHandlers, add_common_system_handlers
 from dewco.systems.sensehat.sense_hat_handlers import add_sense_hat_handlers
 
-#
 def get_systems_from_query() -> List[str]: 
     systemsQuery = flask.request.args.get("systems")
     if systemsQuery == None:
@@ -23,13 +23,10 @@ def get_result_json(result: object) -> str:
     retVal = json.dumps(result, default=lambda x: x.__dict__, indent=4)
     return retVal
 
-def ok(result = None) -> str:
-    if result == None:
-        result = ""
+def respond(result: Result) -> str:
     json = get_result_json(result)
     response = app.response_class(json, status = 200, mimetype = 'application/json')
     return response
-#
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -49,8 +46,8 @@ def getSystem():
         result = domain.Result.from_success(systems)
     except:
         message = sys.exc_info()[0]
-        result = domain.Result.from_error(message)
-    return ok(result)
+        result = Result.from_error(message)
+    return respond(result)
 
 @app.route('/state', methods=['GET'])
 def getState():
@@ -61,26 +58,28 @@ def getState():
         for s in system:
             if s in systemHandlers:
                 states.append(systemHandlers[s].state())
-        result = domain.Result.from_success(states)
+        result = Result.from_success(states)
     except:
         message = sys.exc_info()[0]
-        result = domain.Result.from_error(message)
-    return ok(result)
+        result = Result.from_error(message)
+    return respond(result)
 
 @app.route('/state', methods=['POST'])
 def postState():
-
-    req = flask.request.get_json()
-
-    # for e in req:
-    #     print(type(e))
-    #     print(e)
-
-    system = domain.System.from_dict(req)
-    if system.name in systemHandlers:
-        message = systemHandlers[system.name].action(system)
-
-    return ok()
+    result = None
+    try:
+        req = flask.request.get_json()
+        system = domain.System.from_dict(req)
+        if system.name in systemHandlers:
+            message = systemHandlers[system.name].action(system)
+            if message and len(message) > 0: 
+                result = Result.from_error(message)
+            else:
+                result = Result.from_success(None)
+    except:
+        message = sys.exc_info()[0]
+        result = Result.from_error(message)
+    return respond(result)
 
 if __name__ == "__main__":
-    app.run(host = '0.0.0.0', port = 8090)
+    app.run(host = '0.0.0.0', port = 5000)
