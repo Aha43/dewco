@@ -15,6 +15,7 @@ def add_sense_hat_handlers(handlers: SystemHandlers) -> None:
     except:
         senseHat = None
     add_system_handler(handlers, SenseHatEnvironmentSystemHandler(senseHat))
+    add_system_handler(handlers, SenseHatLedSystemHandler(senseHat))
 
 class SenseHatEnvironmentSystemHandler(SystemHandler):
     def __init__(self, senseHat):
@@ -35,3 +36,24 @@ class SenseHatEnvironmentSystemHandler(SystemHandler):
             state.append(Value.read_only("temperature_from_pressure", self.senseHat.get_temperature_from_pressure(), Units.celsius))
         
         return System.from_success(self.name, state)
+
+class SenseHatLedSystemHandler(SystemHandler):
+    def __init__(self, senseHat):
+        super().__init__("sense_hat.led")
+        self.senseHat = senseHat
+
+    def state(self) -> System:
+        state = []
+        state.append(Value.read_only("system-name", "SenseHat"))
+        available = self.senseHat != None
+        state.append(Value.read_only("available", available))
+
+    def action(self, system: System) -> str:
+        if system.action == 'show_letter':
+            return self.perform_show_letter(system)
+        return "uknown action: " + system.action
+
+    def perform_show_letter(self, system: System) -> str:
+        letters = system.get_state_value("letters")
+        self.senseHat.show_letter(letters)
+        return "OK"

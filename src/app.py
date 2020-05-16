@@ -77,6 +77,8 @@ def postState():
     #     print(e)
 
     system = domain.System.from_dict(req)
+    if system.name in systemHandlers:
+        message = systemHandlers[system.name].action(system)
 
     return ok()
 

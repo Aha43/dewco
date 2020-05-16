@@ -13,5 +13,10 @@ class SenseDummy:
     def get_temperature_from_pressure(self):
         return 14.5
 
+    #LED
+    def show_letter(self, s: str, text_color = [255, 255, 255], back_color = [255, 255, 255]) -> None:
+        print("show on LED letter: " + s)
+        return None
+
 def SenseHat():
     return SenseDummy()

@@ -11,6 +11,9 @@ class SystemHandler:
     def state(self) -> System:
         pass
 
+    def action(self, state: System) -> str:
+        return "do not support actions"
+
 SystemHandlers = Dict[str, SystemHandler]
 
 def add_system_handler(handlers: SystemHandlers, h: SystemHandler) -> None:

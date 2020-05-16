@@ -61,6 +61,14 @@ class System:
         if state != None:
             self.state = state.copy()
         self.action = action
+        
+    @classmethod
+    def from_success(cls, name: str, state: List[Value]):
+        return cls(name, True, None, state)
+
+    @classmethod
+    def from_error(cls, name: str, message: str):
+        return cls(name, False, message, None)
 
     @classmethod
     def from_dict(cls, d: dict):
@@ -74,14 +82,18 @@ class System:
         action = get_dict_value("action", d, "read")
         retVal = cls(name, ok, message, state, action)
         return retVal
-        
-    @classmethod
-    def from_success(cls, name: str, state: List[Value]):
-        return cls(name, True, None, state)
 
-    @classmethod
-    def from_error(cls, name: str, message: str):
-        return cls(name, False, message, None)
+    def get_state_variable(self, name: str) -> Value:
+        for v in self.state:
+            if v.name == name:
+                return v
+        return None
+
+    def get_state_value(self, name: str) -> str:
+        var = self.get_state_variable(name)
+        if var:
+            return var.value
+        return ""
 
 class Result:
     """Result of a request to a device"""
