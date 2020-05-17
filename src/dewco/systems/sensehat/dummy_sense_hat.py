@@ -23,7 +23,7 @@ class SenseDummy:
         print("set rotation: " + str(r))
 
     def show_letter(self, s: str, text_color = [255, 255, 255], back_color = [255, 255, 255]) -> None:
-        print("show on LED letter: " + s + "(" + list_to_str(text_color) + " , " + list_to_str(back_color))
+        print("show on LED letter: " + s + ", text_color: " + list_to_str(text_color) + ", back_color: " + list_to_str(back_color))
 
 def SenseHat():
     return SenseDummy()

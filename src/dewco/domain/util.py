@@ -23,9 +23,14 @@ def str_to_int_list(v: str) -> List[int]:
     return retVal
 
 def list_to_str(l: []) -> str:
-    retVal = ""
+    retVal = "["
+    first = True
     for e in l:
-        retVal = retVal + str(e) + ","
+        if not first:
+            retVal += ","
+        first = False
+        retVal += str(e)
+    retVal += "]"
     return retVal
 
 def str_to_float(v: str) -> float:
