@@ -28,8 +28,8 @@ class BaseSenseHatSystemHandler(SystemHandler):
 
     def _get_base_state(self) -> List[Value]:
         state = []
-        state.append(Value.read_only("system-name", self.name))
-        state.append(Value.read_only("available", self.available))
+        state.append(Value("system-name", self.name))
+        state.append(Value("available", self.available))
         return state
 
 class SenseHatEnvironmentSystemHandler(BaseSenseHatSystemHandler):
@@ -40,11 +40,11 @@ class SenseHatEnvironmentSystemHandler(BaseSenseHatSystemHandler):
         state = self._get_base_state()
 
         if self.available:
-            state.append(Value.read_only("humidity", self.senseHat.get_humidity(), Units.percentage_of_relative_humidity))
-            state.append(Value.read_only("pressure", self.senseHat.get_pressure(), Units.millibars))
-            state.append(Value.read_only("temperature", self.senseHat.get_temperature(), Units.celsius))
-            state.append(Value.read_only("temperature_from_humidity", self.senseHat.get_temperature_from_humidity(), Units.celsius))
-            state.append(Value.read_only("temperature_from_pressure", self.senseHat.get_temperature_from_pressure(), Units.celsius))
+            state.append(Value("humidity", self.senseHat.get_humidity(), Units.percentage_of_relative_humidity))
+            state.append(Value("pressure", self.senseHat.get_pressure(), Units.millibars))
+            state.append(Value("temperature", self.senseHat.get_temperature(), Units.celsius))
+            state.append(Value("temperature_from_humidity", self.senseHat.get_temperature_from_humidity(), Units.celsius))
+            state.append(Value("temperature_from_pressure", self.senseHat.get_temperature_from_pressure(), Units.celsius))
         
         return System.from_success(self.name, state)
 

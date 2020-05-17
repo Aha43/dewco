@@ -7,11 +7,10 @@ from .util import get_dict_value, object_to_str, str_to_bool, str_to_float
 
 class Value:
     """Represents a named value of a System state"""
-    def __init__(self, name: str, value: object, unit: str):
+    def __init__(self, name: str, value: object, unit: str = None):
         self.name = object_to_str(name)
         self.value = object_to_str(value)
         self.unit = object_to_str(unit)
-        self.write = "false"
         self.type = self.__get_api_value_type(value)
 
     def __get_api_value_type(self, val: object) -> str:
@@ -29,20 +28,7 @@ class Value:
         value = get_dict_value("value", d)
         unit = get_dict_value("unit", d)
         retVal = cls(name, value, unit)
-        retVal.write = get_dict_value("write", d)
         retVal.type = get_dict_value("type", d)
-        return retVal
-
-    @classmethod
-    def read_only(cls, name: str, value: object, unit: str = None):
-        retVal = cls(name, value, unit)
-        retVal.write = object_to_str(False)
-        return retVal
-
-    @classmethod
-    def read_write(cls, name: str, value: object, unit: str = None):
-        retVal = cls(name, value, unit)
-        retVal.write = object_to_str(True)
         return retVal
 
 def get_state(dicts: List[Dict]) -> List[Value]:

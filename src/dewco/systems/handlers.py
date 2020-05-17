@@ -30,15 +30,15 @@ class PlatformSystemHandler(SystemHandler):
         data = platform.uname()
         state = []
         if (data[0]):
-            state.append(Value.read_only("system", data[0]))
+            state.append(Value("system", data[0]))
         if (data[1]):
-            state.append(Value.read_only("node", data[1]))
+            state.append(Value("node", data[1]))
         if (data[2]):
-            state.append(Value.read_only("release", data[2]))
+            state.append(Value("release", data[2]))
         if (data[3]):
-            state.append(Value.read_only("version", data[3]))
+            state.append(Value("version", data[3]))
         if (data[4]):
-            state.append(Value.read_only("machine", data[4]))
+            state.append(Value("machine", data[4]))
         if (data[5]):
-            state.append(Value.read_only("processor", data[5]))
+            state.append(Value("processor", data[5]))
         return System.from_success(self.name, state)
