@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from .domain_util import object_to_str
+from .domain.util import object_to_str
 
 
 class Result:

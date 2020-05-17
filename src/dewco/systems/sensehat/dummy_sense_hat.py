@@ -1,6 +1,10 @@
-from ...domain_util import list_to_str
+from ...domain.util import list_to_str
+
 class SenseDummy:
     """Fallback dummy api for the SenseHat API when nor a real Sense HAT system or emulator is avaliable"""
+
+    def __init__(self):
+        self.low_light = False
 
     #Environment
     def get_humidity(self):

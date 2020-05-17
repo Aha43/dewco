@@ -6,7 +6,7 @@ from typing import List
 
 import flask
 
-from dewco import domain
+from dewco.domain.model import System
 from dewco.rest_util import Result
 from dewco.systems.handlers import SystemHandlers, add_common_system_handlers
 from dewco.systems.sensehat.sense_hat_handlers import add_sense_hat_handlers
@@ -43,7 +43,7 @@ def getSystem():
         for h in systemHandlers.values():
             name = h.name
             systems.append(name)
-        result = domain.Result.from_success(systems)
+        result = Result.from_success(systems)
     except:
         message = sys.exc_info()[0]
         result = Result.from_error(message)
@@ -70,7 +70,7 @@ def postState():
     try:
         req = flask.request.get_json()
         for dict in req:       
-            system = domain.System.from_dict(dict)
+            system = System.from_dict(dict)
             if system.name in systemHandlers:
                 message = systemHandlers[system.name].action(system)
                 if message and len(message) > 0: 

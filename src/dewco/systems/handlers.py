@@ -1,7 +1,7 @@
 import platform
 from typing import Dict
 
-from ..domain import System, Value
+from ..domain.model import System, Value
 
 
 class SystemHandler:

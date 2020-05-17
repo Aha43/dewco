@@ -2,10 +2,12 @@ import importlib
 import time
 from typing import Dict, List
 
-from ...domain import System, Value
-from ...domain_util import str_to_int, str_to_int_list
-from ...util import get_env_var, Units
-from ..handlers import SystemHandler, add_system_handler, SystemHandlers
+from ...domain.model import System, Value
+from ...domain.units import Units
+from ...domain.util import str_to_int, str_to_int_list
+from ...util import get_env_var
+from ..handlers import SystemHandler, SystemHandlers, add_system_handler
+
 
 def add_sense_hat_handlers(handlers: SystemHandlers) -> None:
     senseHat = None

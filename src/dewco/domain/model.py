@@ -2,7 +2,7 @@ import numbers
 from datetime import datetime
 from typing import Dict, List
 
-from .domain_util import get_dict_value, object_to_str, str_to_bool, str_to_float
+from .util import get_dict_value, object_to_str, str_to_bool, str_to_float
 
 
 class Value:
