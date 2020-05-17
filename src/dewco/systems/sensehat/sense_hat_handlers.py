@@ -57,13 +57,14 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
 
     def action(self, system: System) -> str:
         if self.available:
-            if system.action == 'show_letter':
+            if system.action == 'show_letters':
                 return self.perform_show_letter(system)
             return "uknown action: " + system.action
         return "system not available"
 
     def perform_show_letter(self, system: System) -> str:
         letters = system.get_state_value("letters")
+        sleep_head = str_to_int(system.get_state_value("sleep_head", "0"))
         sleep = str_to_int(system.get_state_value("sleep", "1"))
         rotation = str_to_int(system.get_state_value("rotation", "0"))
         text_color = str_to_int_list(system.get_state_value("text_color", "255,255,255"))
@@ -72,7 +73,10 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
         if rotation != 0:
             self.senseHat.set_rotation(rotation)
 
+        if sleep_head > 0:
+            time.sleep(sleep_head)
         for c in letters:
             cs = str(c)
             self.senseHat.show_letter(cs, text_color, back_color)
-            time.sleep(sleep)
+            if (sleep > 0):
+                time.sleep(sleep)
