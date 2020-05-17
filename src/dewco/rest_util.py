@@ -19,5 +19,5 @@ class Result:
         return cls(False, message, None)
 
     @classmethod
-    def from_success(cls, data: List[object]):
+    def from_success(cls, data: List[object] = None):
         return cls(True, None, data)

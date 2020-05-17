@@ -66,16 +66,16 @@ def getState():
 
 @app.route('/state', methods=['POST'])
 def postState():
-    result = None
+    result = Result.from_success()
     try:
         req = flask.request.get_json()
-        system = domain.System.from_dict(req)
-        if system.name in systemHandlers:
-            message = systemHandlers[system.name].action(system)
-            if message and len(message) > 0: 
-                result = Result.from_error(message)
-            else:
-                result = Result.from_success(None)
+        for dict in req:       
+            system = domain.System.from_dict(dict)
+            if system.name in systemHandlers:
+                message = systemHandlers[system.name].action(system)
+                if message and len(message) > 0: 
+                    result = Result.from_error(message)
+                    break
     except:
         message = sys.exc_info()[0]
         result = Result.from_error(message)
