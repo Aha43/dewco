@@ -4,3 +4,4 @@ class Units:
     percentage_of_relative_humidity = "percentage_of_relative_humidity"
     second = "second"
     degrees = "degrees"
+    radians = "radians"
