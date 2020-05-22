@@ -71,6 +71,7 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
         rotation = str_to_int(system.get_state_value("rotation", "0"))
         text_color = str_to_int_list(system.get_state_value("text_color", "255,255,255"))
         back_color = str_to_int_list(system.get_state_value("back_color", "0,0,0"))
+        clear_color = str_to_int_list(system.get_state_value("clear_color"))
         
         if rotation != 0:
             self.senseHat.set_rotation(rotation)
@@ -78,7 +79,9 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
         if sleep_head > 0:
             time.sleep(sleep_head)
         for c in letters:
-            cs = str(c)
+            cs = str(c) 
             self.senseHat.show_letter(cs, text_color, back_color)
             if (sleep > 0):
                 time.sleep(sleep)
+        if len(clear_color) == 3:
+            self.senseHat.clear(clear_color)
