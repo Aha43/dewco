@@ -5,10 +5,10 @@ class color_map_test(unittest.TestCase):
 
     def test_color_map_should_have_correct_repr(self):
         builder = color_map_builder(2)
-        builder.add([0, 0, 0])
-        builder.add([0, 1, 0])
-        builder.add([255, 155, 55])
-        builder.add([0, 1, 0])
+        builder.append_pixel([0, 0, 0])
+        builder.append_pixel([0, 1, 0])
+        builder.append_pixel([255, 155, 55])
+        builder.append_pixel([0, 1, 0])
         cm = builder.build()
 
         repr = str(cm)
@@ -17,10 +17,10 @@ class color_map_test(unittest.TestCase):
 
     def test_color_map_should_create_from_rep(self):
         builder = color_map_builder(2)
-        builder.add([1, 2, 3])
-        builder.add([4, 5, 6])
-        builder.add([7, 8, 9])
-        builder.add([10, 11, 12])
+        builder.append_pixel([1, 2, 3])
+        builder.append_pixel([4, 5, 6])
+        builder.append_pixel([7, 8, 9])
+        builder.append_pixel([10, 11, 12])
         cm1 = builder.build()
 
         repr1 = str(cm1)

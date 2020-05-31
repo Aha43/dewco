@@ -80,7 +80,11 @@ class color_map_builder:
     def is_complete(self) -> bool:
         return self.get_missing_pixels() == 0
 
-    def add(self, rgb: List[int]) -> None:
+    def append_pixels(self, rgbs: List[List[int]]) -> None:
+        for p in rgbs:
+            self.append_pixel(p)
+
+    def append_pixel(self, rgb: List[int]) -> None:
         check_rgb_list(rgb)
 
         if (self.is_complete()):
