@@ -1,5 +1,4 @@
 from typing import Dict, List
-from ...domain.util import list_to_str
 from .data_validation import check_rgb_list
 
 class color_map:
@@ -56,7 +55,7 @@ class color_map_builder:
         self.clear(matrix_side)
 
     def __str__(self) -> str:
-        return "color_map: " + str(self.color_dict) + '\n' + "indices: " + list_to_str(self.indices)
+        return "color_map: " + str(self.color_dict) + '\n' + "indices: " + str(self.indices)
 
     def clear(self, matrix_side: int = SENSE_HAT_LED_MATRIX_SIDE) -> None:
         if matrix_side < 1:
