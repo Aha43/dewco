@@ -11,3 +11,4 @@ def get_env_var(name: str, default: str = None) -> str:
     
 def put_env_var(name: str, val: str) -> None:
     os.putenv(name, val)
+    
