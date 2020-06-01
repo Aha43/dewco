@@ -7,6 +7,7 @@ from ...domain.units import Units
 from ...domain.util import str_to_int, str_to_int_list
 from ...util import get_env_var
 from ..handlers import SystemHandler, SystemHandlers, add_system_handler
+from .color_map import color_map, color_map_builder
 
 
 def add_sense_hat_handlers(handlers: SystemHandlers) -> None:
@@ -55,6 +56,15 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
 
     def state(self) -> System:
         state = self._get_base_state()
+
+        if self.available:
+            pixels = self.senseHat.get_pixels()
+            builder = color_map_builder()
+            builder.append_pixels(pixels)
+            cm = builder.build()
+            repr = str(cm)
+            state.append(Value("led_color_map", repr))
+
         return System.from_success(self.name, state)
 
     def action(self, system: System) -> str:

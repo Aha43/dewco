@@ -68,7 +68,11 @@ class SenseDummy:
         self.__led_matrix = cm.get_matrix()
 
     def get_pixels(self) -> List[List[int]]:
-        return copy.deepcopy(self.__led_matrix)
+        retVal = []
+        for row in self.__led_matrix:
+            for p in row:
+                retVal.append(p.copy())
+        return retVal
 
     def set_pixel(self, x: int, y: int, r_or_rgb, g: int = None, b: int = None) -> None:
         check_sense_hat_led_pixel_coordinates(x, y)
