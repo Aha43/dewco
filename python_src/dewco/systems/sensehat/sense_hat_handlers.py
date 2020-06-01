@@ -71,6 +71,8 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
         if self.available:
             if system.action == 'show_letters':
                 return self.perform_show_letter(system)
+            elif system.action == 'set_matrix_from_color_map':
+                return self.perform_set_matrix_from_color_map(system)
             return "uknown action: " + system.action
         return "system not available"
 
@@ -95,3 +97,9 @@ class SenseHatLedSystemHandler(BaseSenseHatSystemHandler):
                 time.sleep(sleep)
         if len(clear_color) == 3:
             self.senseHat.clear(clear_color)
+
+    def perform_set_matrix_from_color_map(self, system: System) -> str:
+        color_map_repr = system.get_state_value("led_color_map")
+        map = color_map.from_rep(color_map_repr)
+        matrix = map.get_matrix()
+        self.senseHat.set_pixels(matrix)
