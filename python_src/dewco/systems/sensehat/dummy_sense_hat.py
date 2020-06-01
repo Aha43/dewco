@@ -1,5 +1,6 @@
 from typing import List
 
+import copy
 from .color_map import color_map_builder
 from .data_validation import (check_rgb_list, check_rgb_values,
                               check_sense_hat_led_pixel_coordinates)
@@ -65,6 +66,9 @@ class SenseDummy:
         builder.append_pixels(pixels)
         cm = builder.build()
         self.__led_matrix = cm.get_matrix()
+
+    def get_pixels(self) -> List[List[int]]:
+        return copy.deepcopy(self.__led_matrix)
 
     def set_pixel(self, x: int, y: int, r_or_rgb, g: int = None, b: int = None) -> None:
         check_sense_hat_led_pixel_coordinates(x, y)
