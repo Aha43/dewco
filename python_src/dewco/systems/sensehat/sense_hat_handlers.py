@@ -13,9 +13,9 @@ from .color_map import color_map, color_map_builder
 def add_sense_hat_handlers(handlers: SystemHandlers) -> None:
     senseHat = None
     try:
-        senseHatModule = get_env_var("__sense_hat_module__", "sense_hat")
+        senseHat = senseHatModule = get_env_var("__sense_hat_module__", "sense_hat")
         sense_module = importlib.import_module(senseHatModule)
-        senseHat = sense_module.SenseHat()
+        sense_module.SenseHat()
     except:
         senseHat = None
     add_system_handler(handlers, SenseHatEnvironmentSystemHandler(senseHat))

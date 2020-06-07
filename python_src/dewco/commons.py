@@ -21,6 +21,12 @@ class Raise:
     def if_none_reference(v, name: str = None) -> None:
         if v == None:
             raise ValueError(Raise.__add_name("None reference", name))
+    
+    @staticmethod
+    def if_not_of_length(l, n: int, name: str = None) -> None:
+        Raise.if_none_reference(l, name)
+        if len(l) != n:
+            raise ValueError(Raise.__add_name("not of length " + str(n), name))
 
     @staticmethod
     def if_not_in_range(v, start, to, name: str = None) -> None:
