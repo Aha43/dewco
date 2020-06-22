@@ -51,7 +51,7 @@ class ColorDictEntry:
 SENSE_HAT_LED_MATRIX_SIDE = 8
 
 class ColorMapBuilder:
-    def __init__(self, matrix_side: int = SENSE_HAT_LED_MATRIX_SIDE):
+    def __init__(self, matrix_side: int = SENSE_HAT_LED_MATRIX_SIDE): # tested
         self.clear(matrix_side)
 
     def __str__(self) -> str:
@@ -79,11 +79,11 @@ class ColorMapBuilder:
     def is_complete(self) -> bool:
         return self.get_missing_pixels() == 0
 
-    def append_pixels(self, rgbs: List[List[int]]) -> None:
+    def append_pixels(self, rgbs: List[List[int]]) -> None: # tested
         for p in rgbs:
             self.append_pixel(p)
 
-    def append_pixel(self, rgb: List[int]) -> None:
+    def append_pixel(self, rgb: List[int]) -> None: #tested
         check_rgb_list(rgb)
 
         if (self.is_complete()):
@@ -98,7 +98,7 @@ class ColorMapBuilder:
         self.indices.append(self.__next_index)
         self.__next_index = self.__next_index + 1
 
-    def build(self) -> ColorMap:
+    def build(self) -> ColorMap: # tested
         if not self.is_complete():
             raise ValueError("Missing pixels: got " + str(self.get_pixel_count()) + " but matrix has " + str(self.matrix_pixel_count))
 
